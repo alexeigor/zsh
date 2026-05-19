@@ -6,11 +6,12 @@ format = "$directory$os$git_branch$git_status$nodejs$rust$golang$php $character"
 
 [os]
 disabled = false
-format = "[$symbol](#E95420) "
+format = "[$symbol](#blue) "
 
 [os.symbols]
 Ubuntu = "󰕈"
 Arch   = "󰣇"
+CachyOS   = "󰣇"
 Macos  = ""
 
 [directory]
