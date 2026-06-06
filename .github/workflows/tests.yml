@@ -28,14 +28,15 @@ jobs:
       - name: Run test suite
         run: zsh tests/run.sh
 
-  # macOS, both arches: macos-13 = Intel (/usr/local Homebrew), macos-latest =
-  # Apple Silicon (/opt/homebrew). Exercises the macOS fzf/MANPAGER branches.
+  # macOS on Apple Silicon (/opt/homebrew). Exercises the macOS fzf/MANPAGER
+  # branches. Intel (macos-13) is omitted: those runners are scarce/being
+  # retired and the only Intel-specific code is the /usr/local fzf path.
   macos:
     name: tests (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-13, macos-latest]
+        os: [macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
