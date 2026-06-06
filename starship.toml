@@ -5,7 +5,7 @@ add_newline = false
 format = "$hostname$directory$os$git_branch$git_status$nodejs$rust$golang$php$python\n$character "
 
 [hostname]
-ssh_only = true   # show the machine name only over SSH, not on the local machine
+ssh_only = false   # show the machine name in every session, local and over SSH
 format = "[$hostname](bold green) "
 
 [os]
