@@ -7,7 +7,7 @@ Powerful but tastefully minimal zsh configuration.
 ### Arch
 
 ```sh
-paru -S zsh neovim eza bat fd fzf zoxide starship ripgrep
+paru -S zsh neovim eza bat fd fzf zoxide starship ripgrep lf
 ```
 
 ### Ubuntu
@@ -17,15 +17,17 @@ sudo apt install zsh neovim eza bat fd-find fzf ripgrep
 # install zoxide and starship separately
 curl -sSfL https://raw.githubusercontent.com/ajeetdsouza/zoxide/main/install.sh | sh
 curl -sS https://starship.rs/install.sh | sh
-# Ubuntu installs bat and fd under different names — symlink them so everything works
+# Ubuntu installs bat and fd under different names, symlink them so everything works
 ln -s $(which batcat) ~/.local/bin/bat
 ln -s $(which fdfind) ~/.local/bin/fd
+# lf is not packaged in apt; grab the latest release binary (use lf-linux-arm64 on ARM)
+curl -fsSL https://github.com/gokcehan/lf/releases/latest/download/lf-linux-amd64.tar.gz | tar xz -C ~/.local/bin lf
 ```
 
 ### macOS
 
 ```sh
-brew install zsh neovim eza bat fd fzf zoxide starship ripgrep
+brew install zsh neovim eza bat fd fzf zoxide starship ripgrep lf
 ```
 
 ## Setup
@@ -65,7 +67,18 @@ mkdir -p ~/.local/state/zsh   # history
 mkdir -p ~/.cache/zsh         # completion cache
 ```
 
-**5. Start a new shell**
+**5. Install lf icons (optional)**
+
+`.zshrc` exports `LF_ICONS` from `~/.config/lf/icons` to give the [lf](https://github.com/gokcehan/lf) file manager file-type icons. The config skips this gracefully when the file is absent, so this step is optional. To enable icons, drop in the example file from the lf project (requires a [Nerd Font](https://www.nerdfonts.com)):
+
+```sh
+mkdir -p ~/.config/lf
+curl -fsSL https://raw.githubusercontent.com/gokcehan/lf/master/etc/icons.example -o ~/.config/lf/icons
+```
+
+For colored icons instead, use `etc/icons_colored.example` from the same path.
+
+**6. Start a new shell**
 
 Plugins are installed automatically on first launch via the built-in plugin manager.
 
