@@ -40,7 +40,7 @@ brew install zsh neovim eza bat fd fzf zoxide starship ripgrep lf
 **1. Clone the repo**
 
 ```sh
-git clone https://github.com/radleylewis/zsh ~/.config/zsh
+git clone https://github.com/alexeigor/zsh ~/.config/zsh
 ```
 
 **2. Point zsh at the config directory**
@@ -119,3 +119,7 @@ zplugin-update
 ## Starship Config
 
 Included in the repo at [`starship.toml`](./starship.toml) and loaded automatically via `STARSHIP_CONFIG` in `.zshenv`. Requires a [Nerd Font](https://www.nerdfonts.com) in your terminal.
+
+## Credits
+
+Originally based on [radleylewis/zsh](https://github.com/radleylewis/zsh) by Radley Sidwell-Lewis. This fork, maintained by [Alexey Gorodilov](https://github.com/alexeigor), adds a number of modifications and improvements (prompt refinements, startup-performance work, a test suite with CI across macOS and Linux, and an automated VHS demo) while keeping the original's tastefully minimal spirit. Distributed under the MIT License; see [LICENSE](./LICENSE).
