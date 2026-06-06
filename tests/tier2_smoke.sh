@@ -36,7 +36,10 @@ local out="$sandbox/out.log" err="$sandbox/err.log"
 
 # Snapshot the real history file's mtime to prove the sandboxed run never
 # touches it. stat differs on macOS (-f %m) vs GNU/Linux (-c %Y).
-_mtime() { stat -f %m "$1" 2>/dev/null || stat -c %Y "$1" 2>/dev/null; }
+# GNU/Linux form (-c %Y) first, then BSD/macOS (-f %m). The order matters:
+# on Linux `stat -f` means "filesystem status" and would dump block/inode info
+# instead of an mtime, so the GNU form must be tried first.
+_mtime() { stat -c %Y "$1" 2>/dev/null || stat -f %m "$1" 2>/dev/null; }
 local real_hist="${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history"
 local hist_before=""; [[ -e "$real_hist" ]] && hist_before="$(_mtime "$real_hist")"
 
