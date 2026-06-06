@@ -17,6 +17,8 @@ REPO="${0:A:h:h}"
 source "${0:A:h}/lib.sh"
 source "${0:A:h}/tier1_syntax.sh"
 source "${0:A:h}/tier2_smoke.sh"
+source "${0:A:h}/tier3_behavior.sh"
+source "${0:A:h}/tier4_starship.sh"
 
 print
 print -r -- "== Summary =="

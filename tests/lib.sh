@@ -25,3 +25,12 @@ assert_eq() {
     fail "$3 (expected '$1', got '$2')"
   fi
 }
+
+# assert_match <substring> <text> <label>
+assert_match() {
+  if [[ "$2" == *"$1"* ]]; then
+    pass "$3"
+  else
+    fail "$3 (expected to contain '$1', got '$2')"
+  fi
+}

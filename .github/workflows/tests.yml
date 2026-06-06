@@ -6,7 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  native:
+  # Native Ubuntu LTS runners.
+  ubuntu:
     name: tests (${{ matrix.os }})
     strategy:
       fail-fast: false
@@ -15,7 +16,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
-
       - name: Install zsh, zoxide, starship
         run: |
           set -euo pipefail
@@ -25,24 +25,52 @@ jobs:
           curl -fsSL https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz \
             | sudo tar xz -C /usr/local/bin starship
           zsh --version && zoxide --version && starship --version
-
       - name: Run test suite
         run: zsh tests/run.sh
 
-  container:
-    name: tests (ubuntu:26.04 container)
-    runs-on: ubuntu-latest
+  # macOS, both arches: macos-13 = Intel (/usr/local Homebrew), macos-latest =
+  # Apple Silicon (/opt/homebrew). Exercises the macOS fzf/MANPAGER branches.
+  macos:
+    name: tests (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-13, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v5
-
-      - name: Run suite inside ubuntu:26.04
+      - name: Install tools (Homebrew)
         run: |
-          docker run --rm -v "$PWD":/cfg:ro ubuntu:26.04 bash -c '
+          set -euo pipefail
+          brew install zoxide starship fzf bat fd eza lf
+          zsh --version && zoxide --version && starship --version
+      - name: Run test suite
+        run: zsh tests/run.sh
+
+  # Distros without a hosted runner, exercised via Docker on an Ubuntu host.
+  container:
+    name: tests (${{ matrix.image }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ["ubuntu:26.04", "archlinux:latest"]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Run suite in ${{ matrix.image }}
+        env:
+          IMAGE: ${{ matrix.image }}
+        run: |
+          docker run --rm -v "$PWD":/cfg:ro "$IMAGE" sh -c '
             set -e
-            export DEBIAN_FRONTEND=noninteractive
-            apt-get update -qq
-            apt-get install -y -qq zsh zoxide curl ca-certificates tar >/dev/null
-            curl -fsSL https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz \
-              | tar xz -C /usr/local/bin starship
+            if command -v apt-get >/dev/null; then
+              export DEBIAN_FRONTEND=noninteractive
+              apt-get update -qq
+              apt-get install -y -qq zsh zoxide fzf curl ca-certificates tar >/dev/null
+              curl -fsSL https://github.com/starship/starship/releases/latest/download/starship-x86_64-unknown-linux-gnu.tar.gz \
+                | tar xz -C /usr/local/bin starship
+            else
+              pacman -Sy --noconfirm zsh zoxide starship fzf >/dev/null
+            fi
             cd /cfg && zsh tests/run.sh
           '
