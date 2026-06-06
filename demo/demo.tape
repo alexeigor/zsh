@@ -50,6 +50,9 @@ Type "tree" Sleep 500ms Enter
 Sleep 1.5s
 Type "cat app.py" Sleep 500ms Enter
 Sleep 2s
+# grep is aliased to ripgrep: fast, coloured content search
+Type "grep def" Sleep 500ms Enter
+Sleep 2s
 
 # ---------------------------------------------------------------------------
 # 2. fzf file picker (Ctrl+F) with a bat preview; the pick is inserted inline
@@ -66,7 +69,15 @@ Enter
 Sleep 2s
 
 # ---------------------------------------------------------------------------
-# 3. Plugins
+# 3. Live git status: stage a change, watch the prompt segment update
+# ---------------------------------------------------------------------------
+Type "git add app.py" Sleep 500ms Enter
+Sleep 1.8s
+Type "git restore --staged app.py" Sleep 500ms Enter
+Sleep 1.6s
+
+# ---------------------------------------------------------------------------
+# 4. Plugins
 # ---------------------------------------------------------------------------
 # autosuggestions: a gray completion from history; accept with Ctrl+E
 Type "git st"
@@ -91,8 +102,14 @@ Ctrl+C
 Sleep 600ms
 
 # ---------------------------------------------------------------------------
-# 4. Navigation (zoxide, lf)
+# 5. Navigation (AUTO_CD, zoxide, lf)
 # ---------------------------------------------------------------------------
+# AUTO_CD: change directory by typing a path, no `cd` needed
+Type ".." Sleep 400ms Enter
+Sleep 1.2s
+Type "demo" Sleep 400ms Enter
+Sleep 1.2s
+# zoxide: jump to a frecent directory by keyword
 Type "z widget" Sleep 500ms Enter
 Sleep 1.5s
 Type "z demo" Sleep 500ms Enter
@@ -106,7 +123,7 @@ Type "q"
 Sleep 1.5s
 
 # ---------------------------------------------------------------------------
-# 5. zsh-vi-mode (last: Esc switches the prompt to ❮ and a block cursor)
+# 6. zsh-vi-mode (last: Esc switches the prompt to ❮ and a block cursor)
 # ---------------------------------------------------------------------------
 Type "echo vi-mode ready"
 Sleep 800ms
