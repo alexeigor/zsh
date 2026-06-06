@@ -139,3 +139,11 @@ if [[ -s "$NVM_DIR/nvm.sh" ]]; then
   done
   unset _cmd
 fi
+
+# =========================================================
+# Machine-local overrides
+# =========================================================
+
+# Host-specific env, PATHs, and functions that should not live in the repo.
+# Sourced last so it can override anything above. Gitignored.
+[[ -r "$ZDOTDIR/local.zsh" ]] && source "$ZDOTDIR/local.zsh"
