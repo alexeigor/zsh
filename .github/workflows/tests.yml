@@ -14,7 +14,7 @@ jobs:
         os: [ubuntu-22.04, ubuntu-24.04]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install zsh, zoxide, starship
         run: |
@@ -33,7 +33,7 @@ jobs:
     name: tests (ubuntu:26.04 container)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Run suite inside ubuntu:26.04
         run: |
