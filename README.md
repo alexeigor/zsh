@@ -116,6 +116,17 @@ zplugin-update
 | `↑` / `↓` | History search by prefix |
 | `Ctrl+\` | Toggle autosuggestions |
 
+## Commands
+
+fzf-powered helper functions (run by name, defined in [`fzf.zsh`](./fzf.zsh)). They need only tools already listed as dependencies.
+
+| Command | Action |
+|---------|--------|
+| `fkill [signal]` | Fuzzy-pick process(es) and signal them (default `TERM`; `Tab` to multi-select) |
+| `fco` | Fuzzy-checkout a git branch (local + remote), most recent first |
+| `fcd [path]` | Fuzzy-`cd` into a subdirectory |
+| `frg <pattern>` | ripgrep a pattern, pick a match in fzf, open it in `$EDITOR` at the line |
+
 ## Starship Config
 
 Included in the repo at [`starship.toml`](./starship.toml) and loaded automatically via `STARSHIP_CONFIG` in `.zshenv`. Requires a [Nerd Font](https://www.nerdfonts.com) in your terminal.
@@ -125,6 +136,8 @@ Included in the repo at [`starship.toml`](./starship.toml) and loaded automatica
 Originally based on [radleylewis/zsh](https://github.com/radleylewis/zsh) by Radley Sidwell-Lewis. This fork, maintained by [Alexey Gorodilov](https://github.com/alexeigor), adds a number of modifications and improvements while keeping the original's tastefully minimal spirit. Distributed under the MIT License; see [LICENSE](./LICENSE).
 
 ### What this fork adds
+
+For a detailed tour of how each feature is wired up, see [`FEATURES.md`](./FEATURES.md).
 
 - **Prompt** (starship): `user@host`, full untruncated path, a two-line layout, a Python module (also triggered by a `.venv` directory), and filled-in language icons for Node, Rust, Go, and PHP.
 - **Faster startup**: plugins compiled to `.zwc` bytecode, lazy-loaded nvm, and a cached `compinit` (full security audit runs at most once a day).

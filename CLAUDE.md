@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A personal zsh configuration that lives at `$ZDOTDIR` (`~/.config/zsh`). There is no build or test step. Changes are validated by sourcing a file or starting a new shell.
+A personal zsh configuration that lives at `$ZDOTDIR` (`~/.config/zsh`). There is no build or test step. Changes are validated by sourcing a file or starting a new shell. For a feature-by-feature explanation of the config, see `FEATURES.md`.
 
 ## Common commands
 
@@ -27,7 +27,7 @@ zsh sources files in a fixed order; this is the most important thing to understa
 
 - `aliases.zsh` — aliases and small functions. Note tools are aliased over their coreutils equivalents (`ls`→eza, `cat`→bat, `grep`→rg). The `lf` function is a wrapper that makes the file manager change the shell's cwd on exit.
 - `bindings.zsh` — keybindings and zsh-vi-mode cursor/highlight config. **Custom bindings must go inside `zvm_after_init()`**: zsh-vi-mode resets all keybindings on init, so anything bound at top level is silently clobbered.
-- `fzf.zsh` — fzf env vars (`FZF_DEFAULT_COMMAND` uses `fd`, preview uses `bat`) and the `_fzf_file_no_hidden` ZLE widget bound to Ctrl+F.
+- `fzf.zsh` — fzf env vars (`FZF_DEFAULT_COMMAND` uses `fd`, preview uses `bat`), the `_fzf_file_no_hidden` ZLE widget bound to Ctrl+F, and the typed-command fzf helpers (`fkill`, `fco`, `fcd`, `frg`). Helpers are run by name rather than bound to keys (the `lf()` pattern), so they sidestep the zsh-vi-mode binding reset. When adding one, avoid the name `fd` (it shadows the fd CLI) and add a `$+functions[...]` assertion to `tests/tier3_behavior.sh`.
 - `plugins.zsh` — self-contained plugin manager. `_zplugin_load <github-user> <repo>` clones to `plugins/<repo>` on first run and sources `<repo>.plugin.zsh`. To add a plugin, add another `_zplugin_load` line. The `plugins/` dir is gitignored, so plugins are not vendored — they install on first shell launch.
 - `prompt.zsh` — initializes starship; config is `starship.toml` in this repo.
 
