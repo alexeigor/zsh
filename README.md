@@ -2,6 +2,11 @@
 
 Powerful but tastefully minimal zsh configuration.
 
+![demo](demo/demo.gif)
+
+> The demo above is generated automatically with [VHS](https://github.com/charmbracelet/vhs).
+> Regenerate it with `demo/record.sh` (requires Docker); CI refreshes it when the tape or config changes.
+
 ## Dependencies
 
 ### Arch

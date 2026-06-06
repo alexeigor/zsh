@@ -20,3 +20,6 @@ tests/.sandbox*
 
 # Tutorial outline
 TUTORIAL.md
+
+# VHS debug frame extracts
+demo/frame_*.png

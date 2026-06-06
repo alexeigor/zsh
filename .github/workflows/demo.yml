@@ -1,0 +1,35 @@
+name: demo
+
+# Regenerate demo/demo.gif when the tape, its Docker env, or the config that
+# the demo shows changes. The generated gif is committed back. The commit only
+# touches *.gif (not in the paths filter below), so it does not retrigger.
+on:
+  push:
+    paths:
+      - demo/demo.tape
+      - demo/Dockerfile
+      - .zshrc
+      - .zshenv
+      - "*.zsh"
+      - starship.toml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Render demo/demo.gif
+        run: bash demo/record.sh
+
+      - name: Commit updated gif
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: regenerate demo gif"
+          file_pattern: demo/demo.gif
+          commit_user_name: demo-bot
+          commit_user_email: actions@github.com

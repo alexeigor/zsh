@@ -1,0 +1,10 @@
+.git
+plugins/
+*.gif
+*.zwc
+.zcompdump*
+.zsh_history
+.zprofile
+local.zsh
+tests/.sandbox*
+.DS_Store
