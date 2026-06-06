@@ -7,12 +7,16 @@ plugins/
 
 # Machine-local overrides
 local.zsh
+.zprofile
+
+# Shell history (may contain secrets)
+.zsh_history
+
+# Test sandbox leftovers (normally auto-cleaned)
+tests/.sandbox*
 
 # macOS metadata
 .DS_Store
 
 # Tutorial outline
 TUTORIAL.md
-
-# installed plugins
-./plugins/

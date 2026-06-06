@@ -50,8 +50,17 @@ eval "$(zoxide init zsh)"
 # Load completion system
 autoload -Uz compinit
 
-# Initialize completion with cached metadata file
-compinit -d "$XDG_CACHE_HOME/zsh/zcompdump"
+# Initialize completion with a cached metadata file.
+# Run the full security audit only if the dump is missing or older than 24h
+# (#qN.mh+24 = glob qualifier: Nullglob, modified more than 24 hours ago);
+# otherwise use the fast path (-C) and skip the audit for snappier startup.
+zcompdump="$XDG_CACHE_HOME/zsh/zcompdump"
+if [[ -n ${zcompdump}(#qN.mh+24) ]]; then
+  compinit -d "$zcompdump"
+else
+  compinit -C -d "$zcompdump"
+fi
+unset zcompdump
 
 # Enable interactive completion menu selection
 zstyle ':completion:*' menu select
@@ -112,6 +121,18 @@ source "$ZDOTDIR/prompt.zsh"
 # Node / NVM
 # =========================================================
 
+# Sourcing nvm on every shell is slow (~hundreds of ms). Instead, define light
+# stubs that load nvm only on first use of nvm/node/npm/npx, then re-exec the
+# real command. After the first call the stubs are gone and there is no overhead.
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
+if [[ -s "$NVM_DIR/nvm.sh" ]]; then
+  _load_nvm() {
+    unset -f nvm node npm npx 2>/dev/null
+    source "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"
+  }
+  for _cmd in nvm node npm npx; do
+    eval "${_cmd}() { _load_nvm; ${_cmd} \"\$@\"; }"
+  done
+  unset _cmd
+fi

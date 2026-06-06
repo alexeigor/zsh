@@ -2,7 +2,7 @@
 
 add_newline = false
 
-format = "$directory$os$git_branch$git_status$nodejs$rust$golang$php $character"
+format = "$directory$os$git_branch$git_status$nodejs$rust$golang$php$python\n$character "
 
 [os]
 disabled = false
@@ -17,8 +17,8 @@ Macos   = ""
 
 [directory]
 format            = "[$path](cyan) "
-truncation_length = 4
-truncate_to_repo  = true
+truncation_length = 0      # 0 = no truncation, show the whole path
+truncate_to_repo  = false  # don't shorten to the git repo root
 
 [git_branch]
 symbol = ""
@@ -36,20 +36,25 @@ deleted    = "[✘$count ](bold red)"
 conflicted = "[⚡$count ](bold red)"
 
 [nodejs]
-symbol = ""
+symbol = ""
 format = "[$symbol $version](green) "
 
 [rust]
-symbol = ""
+symbol = ""
 format = "[$symbol $version](red) "
 
 [golang]
-symbol = ""
+symbol = ""
 format = "[$symbol $version](cyan) "
 
 [php]
-symbol = ""
+symbol = ""
 format = "[$symbol $version](purple) "
+
+[python]
+symbol = ""
+format = "[$symbol $version](yellow) "
+detect_folders = [".venv", "venv"]
 
 [character]
 success_symbol = "[❯](green)"
