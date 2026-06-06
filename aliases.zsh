@@ -10,8 +10,10 @@ alias la='eza -lah --icons --git'
 # Tree view
 alias tree='eza --tree --icons'
 
-# Reuse ls completions for eza (avoids defining a separate completion function)
-compdef eza=ls
+# Reuse ls completions for eza (avoids defining a separate completion function).
+# Guard on compdef existing: if compinit has not run (e.g. a headless shell with
+# no tty), compdef is undefined and would otherwise error.
+(( $+functions[compdef] )) && compdef eza=ls
 
 # Better cat
 alias cat='bat'

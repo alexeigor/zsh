@@ -57,16 +57,18 @@ local rc=$?
 
 assert_eq 0 "$rc" "interactive startup exits 0"
 
-# `zsh -i` without a controlling tty cannot start ZLE, which emits a harmless
-# "can't change option: zle" line. Drop those; anything left is a real error
-# (e.g. command-not-found, cat failures, compinit warnings).
-local real_err; real_err="$(grep -v "can't change option: zle" "$err")"
+# `zsh -i` without a controlling tty (CI, no pty) emits harmless artifacts:
+# it can't start ZLE ("can't change option: zle") and can't open a terminal,
+# which aborts compinit. These never happen in a real interactive shell. Drop
+# them; anything left is a real error (command-not-found, cat failures, etc.).
+local benign="can't change option: zle|not interactive and can't open terminal|compinit: initialization aborted"
+local real_err; real_err="$(grep -vE "$benign" "$err")"
 if [[ -n "$real_err" ]]; then
-  fail "startup stderr is empty (ignoring benign zle warning)"
+  fail "startup stderr is empty (ignoring benign no-tty warnings)"
   print -r -- "    --- stderr ---"
   print -r -- "$real_err" | sed 's/^/    /'
 else
-  pass "startup stderr is empty (ignoring benign zle warning)"
+  pass "startup stderr is empty (ignoring benign no-tty warnings)"
 fi
 
 # Isolation: the real history file must be byte-for-byte untouched by the run.
