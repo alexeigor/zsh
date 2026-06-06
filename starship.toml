@@ -2,7 +2,11 @@
 
 add_newline = false
 
-format = "$directory$os$git_branch$git_status$nodejs$rust$golang$php$python\n$character "
+format = "$hostname$directory$os$git_branch$git_status$nodejs$rust$golang$php$python\n$character "
+
+[hostname]
+ssh_only = true   # show the machine name only over SSH, not on the local machine
+format = "[$hostname](bold green) "
 
 [os]
 disabled = false
