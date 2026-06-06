@@ -2,11 +2,15 @@
 
 add_newline = false
 
-format = "$hostname$directory$os$git_branch$git_status$nodejs$rust$golang$php$python\n$character "
+format = "$username$hostname$directory$os$git_branch$git_status$nodejs$rust$golang$php$python\n$character "
+
+[username]
+show_always = true   # always show the user, not just for root / over SSH
+format = "[$user](bold green)"
 
 [hostname]
 ssh_only = false   # show the machine name in every session, local and over SSH
-format = "[$hostname](bold green) "
+format = "[@$hostname](bold green) "
 
 [os]
 disabled = false
