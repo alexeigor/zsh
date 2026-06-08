@@ -43,8 +43,10 @@ if [[ -r ~/.config/lf/icons ]]; then
   export LF_ICONS="$(tr '\n' ':' < ~/.config/lf/icons)"
 fi
 
-# Initialize zoxide
-eval "$(zoxide init zsh)"
+# Initialize zoxide (guarded so a shell without zoxide on PATH starts cleanly)
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh)"
+fi
 
 # =========================================================
 # Completion
