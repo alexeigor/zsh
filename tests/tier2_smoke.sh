@@ -7,16 +7,17 @@
 
 section "Tier 2: sandboxed startup smoke test"
 
-# The config calls `zoxide init` and `starship init` unguarded; if those tools
-# are absent the startup would print "command not found". Skip (don't fail) so
-# the suite stays honest on machines where they aren't installed.
+# `zoxide init` / `starship init` are now command-v guarded (Tier 3 verifies a
+# clean startup when they are absent). This full smoke test still wants the real
+# tools present so it exercises their actual init output; skip (don't fail) when
+# they aren't installed so the suite stays honest on minimal machines.
 local -a missing
 local tool
 for tool in zoxide starship; do
   command -v "$tool" >/dev/null 2>&1 || missing+=("$tool")
 done
 if (( ${#missing} )); then
-  skip "startup smoke (missing tools: ${missing[*]}; install them or add command-v guards)"
+  skip "full startup smoke (missing tools: ${missing[*]}; Tier 3 covers clean startup without them)"
   return 0
 fi
 

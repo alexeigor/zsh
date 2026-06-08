@@ -23,3 +23,17 @@ for f in "${files[@]}"; do
     zsh -n -- "$f"
   fi
 done
+
+# install.sh is bash, not zsh -- parse it with `bash -n` so it can't rot.
+if [[ -f "$REPO/install.sh" ]]; then
+  if command -v bash >/dev/null 2>&1; then
+    if bash -n "$REPO/install.sh" 2>/dev/null; then
+      pass "install.sh"
+    else
+      fail "install.sh"
+      bash -n "$REPO/install.sh"
+    fi
+  else
+    skip "install.sh (bash not available to parse it)"
+  fi
+fi

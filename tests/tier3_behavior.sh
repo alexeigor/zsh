@@ -81,6 +81,34 @@ local lf_err="$(env -i HOME="$sb2" ZDOTDIR="$REPO" ZPLUGINDIR="$REPO/plugins" \
 if [[ -z "$lf_err" ]]; then pass "no lf/icons error when the file is absent"; else fail "no lf/icons error when the file is absent ($lf_err)"; fi
 rm -rf "$sb2"
 
+# --- zoxide/starship guard: absent from PATH -> no command-not-found (regression)
+# Reproduces the reported failure where a login shell without /opt/homebrew/bin
+# on PATH printed `command not found: zoxide` and `command not found: starship`.
+# Both inits are now wrapped in `command -v` guards, so a PATH that lacks those
+# binaries must still start cleanly. Build a PATH with every directory holding
+# zoxide or starship removed, so the guards see them as absent no matter where
+# they are installed (works on machines without the tools at all, e.g. CI).
+local zsh_bin="${commands[zsh]:-zsh}"   # absolute path, in case zsh shares a dir we strip
+local -a safe_path=()
+local d
+for d in $path; do
+  [[ -x "$d/zoxide" || -x "$d/starship" ]] && continue
+  safe_path+=("$d")
+done
+local sb3="$(mktemp -d)"
+mkdir -p "$sb3/.cache/zsh" "$sb3/.local/state/zsh"
+local guard_err="$(env -i HOME="$sb3" ZDOTDIR="$REPO" ZPLUGINDIR="$REPO/plugins" \
+  HISTFILE="$sb3/.local/state/zsh/history" TERM="${TERM:-xterm-256color}" \
+  PATH="${(j.:.)safe_path}" ZSH_SKIP_PLUGIN_INSTALL=1 \
+  "$zsh_bin" -ic 'print -r -- READY' 2>&1 1>/dev/null \
+  | grep -iE 'command not found.*(zoxide|starship)|(zoxide|starship).*command not found' || true)"
+if [[ -z "$guard_err" ]]; then
+  pass "no command-not-found when zoxide/starship are absent from PATH"
+else
+  fail "no command-not-found when zoxide/starship are absent from PATH ($guard_err)"
+fi
+rm -rf "$sb3"
+
 # --- local.zsh override hook is wired into .zshrc (static check; safe) --------
 if grep -q 'source .*local.zsh' "$REPO/.zshrc"; then
   pass ".zshrc sources machine-local local.zsh"

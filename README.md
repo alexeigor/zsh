@@ -37,6 +37,22 @@ brew install zsh neovim eza bat fd fzf zoxide starship ripgrep lf
 
 ## Setup
 
+### Quick start (scripted)
+
+```sh
+git clone https://github.com/alexeigor/zsh ~/.config/zsh
+~/.config/zsh/install.sh          # add --check for a dry run
+```
+
+`install.sh` is idempotent and runs the manual steps below on macOS (Homebrew),
+Arch (pacman), and Debian/Ubuntu (apt). It installs dependencies, creates the
+runtime directories, wires up the `ZDOTDIR` bootstrap, and *prompts* before
+installing a Nerd Font or changing your login shell. Flags: `--check` (dry run),
+`--yes`, `--no-font`, `--no-chsh`, `--font NAME`. It never overwrites an existing
+`~/.zshrc` — it warns and leaves it in place.
+
+### Manual setup
+
 **1. Clone the repo**
 
 ```sh
@@ -72,9 +88,35 @@ mkdir -p ~/.local/state/zsh   # history
 mkdir -p ~/.cache/zsh         # completion cache
 ```
 
-**5. Install lf icons (optional)**
+**5. Install a Nerd Font**
 
-`.zshrc` exports `LF_ICONS` from `~/.config/lf/icons` to give the [lf](https://github.com/gokcehan/lf) file manager file-type icons. The config skips this gracefully when the file is absent, so this step is optional. To enable icons, drop in the example file from the lf project (requires a [Nerd Font](https://www.nerdfonts.com)):
+The starship prompt, `eza --icons`, and the optional `lf` icons all use [Nerd Font](https://www.nerdfonts.com) glyphs. Without a Nerd Font installed **and selected in your terminal**, those symbols render as tofu (blank boxes). Any Nerd Font works; [MesloLG](https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Meslo) is a good default.
+
+```sh
+# macOS (Homebrew)
+brew install --cask font-meslo-lg-nerd-font
+
+# Arch
+paru -S ttf-meslo-nerd
+
+# Ubuntu / manual: download a font from the Nerd Fonts releases and install it
+# into ~/.local/share/fonts, then refresh the font cache
+mkdir -p ~/.local/share/fonts
+curl -fsSL -o /tmp/Meslo.zip \
+  https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip
+unzip -o /tmp/Meslo.zip -d ~/.local/share/fonts/Meslo
+fc-cache -f
+```
+
+Then set it as your terminal's font:
+
+- **iTerm2**: Settings → Profiles → Text → Font → `MesloLGS Nerd Font`
+- **Terminal.app**: Settings → Profiles → Text → Change Font → `MesloLGS Nerd Font`
+- **Alacritty / kitty / WezTerm / GNOME Terminal**: set the font family to `MesloLGS Nerd Font` (or the family name of whichever Nerd Font you installed) in the relevant config or preferences.
+
+**6. Install lf icons (optional)**
+
+`.zshrc` exports `LF_ICONS` from `~/.config/lf/icons` to give the [lf](https://github.com/gokcehan/lf) file manager file-type icons. The config skips this gracefully when the file is absent, so this step is optional. To enable icons, drop in the example file from the lf project (requires a [Nerd Font](https://www.nerdfonts.com), see step 5):
 
 ```sh
 mkdir -p ~/.config/lf
@@ -83,7 +125,7 @@ curl -fsSL https://raw.githubusercontent.com/gokcehan/lf/master/etc/icons.exampl
 
 For colored icons instead, use `etc/icons_colored.example` from the same path.
 
-**6. Start a new shell**
+**7. Start a new shell**
 
 Plugins are installed automatically on first launch via the built-in plugin manager.
 
@@ -129,7 +171,7 @@ fzf-powered helper functions (run by name, defined in [`fzf.zsh`](./fzf.zsh)). T
 
 ## Starship Config
 
-Included in the repo at [`starship.toml`](./starship.toml) and loaded automatically via `STARSHIP_CONFIG` in `.zshenv`. Requires a [Nerd Font](https://www.nerdfonts.com) in your terminal.
+Included in the repo at [`starship.toml`](./starship.toml) and loaded automatically via `STARSHIP_CONFIG` in `.zshenv`. Requires a [Nerd Font](https://www.nerdfonts.com) installed and selected in your terminal — see [Setup step 5](#setup).
 
 ## Credits
 
